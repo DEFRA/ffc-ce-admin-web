@@ -1,0 +1,11 @@
+environment: production
+service:
+  port: 443
+  type: NodePort
+container:
+  allowPrivilegeEscalation: false
+  imagePullPolicy: Always
+  paymentUrl: http://ffc-ce-payment-orchestrator.ffc-ce
+ingress:
+  endPoint: ffc-ce-admin-web
+  server: ffc.aws-int.defra.cloud

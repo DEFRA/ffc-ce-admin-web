@@ -1,0 +1,16 @@
+version: '3.7'
+
+# This override file should be used in development environments to
+# connect this service to sibling services from other repositories
+
+services:
+  ffc-ce-admin-web:
+    networks:
+      - default
+      - ffc-ce
+    ports:
+      - "3000:3000"
+
+networks:
+  ffc-ce:
+    external: true

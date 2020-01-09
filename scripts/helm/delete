@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+set -e
+projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/../.." || return; pwd)"
+
+# Set Docker/Kubernetes resource names managed by this script
+basicAuthSecret="ffc-ce-basic-auth"
+containerName="ffc-ce-admin-web"
+dockerPrefix="ffc-ce-admin-web"
+
+(
+  cd "${projectRoot}"
+
+  helm delete --purge \
+    ${containerName}
+)

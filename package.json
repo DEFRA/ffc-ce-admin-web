@@ -1,0 +1,73 @@
+{
+  "name": "ffc-ce-admin-web",
+  "description": "Digital service for calculation engine.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/DEFRA/ffc-ce-admin-web",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DEFRA/ffc-ce-admin-web.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "node-sass --output-style=expanded --output=server/public/build/stylesheets client/sass",
+    "build:watch": "node-sass --output-style=expanded --output=server/public/build/stylesheets --watch client/sass",
+    "pretest": "npm run lint",
+    "lint": "standard",
+    "test": "jest",
+    "test:watch": "nodemon --inspect=0.0.0.0 --ext js,njk --legacy-watch --exec npm test",
+    "start:watch": "npm-run-all --parallel build:watch start:nodemon",
+    "start:nodemon": "nodemon --inspect=0.0.0.0 --ext css,js,njk --legacy-watch index.js"
+  },
+  "author": "Defra DDTS",
+  "contributors": [
+    "John Watson john.watson2@rpa.gov.uk",
+    "Mark Harrop mark.harrop@defra.gov.uk",
+    "Matthew Collins matthew.collins@defra.gov.uk",
+    "David Bingham david.bingham@defra.gov.uk",
+    "Neil McLaughlin neil.mclaughlin@defra.gov.uk",
+    "Paul Andrews paul.andrews@defra.gov.uk",
+    "Phil Benson phil.benson@defra.gov.uk"
+  ],
+  "license": "OGL-UK-3.0",
+  "dependencies": {
+    "@hapi/hapi": "^18.4.0",
+    "@hapi/hoek": "^8.3.0",
+    "@hapi/inert": "^5.2.2",
+    "@hapi/joi": "^16.1.7",
+    "@hapi/vision": "^5.5.4",
+    "@hapi/wreck": "^15.1.0",
+    "@hapi/yar": "^9.2.1",
+    "govuk-frontend": "^3.2.0",
+    "moment": "^2.24.0",
+    "nunjucks": "^3.2.0"
+  },
+  "devDependencies": {
+    "@hapi/good": "^8.2.3",
+    "@hapi/good-console": "^8.1.2",
+    "@hapi/good-squeeze": "^5.2.1",
+    "blipp": "^4.0.1",
+    "jest": "^24.9.0",
+    "jest-junit": "^8.0.0",
+    "node-sass": "^4.12.0",
+    "nodemon": "^1.19.3",
+    "npm-run-all": "^4.1.5",
+    "standard": "^14.3.1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test-output/**"
+    ]
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "beforeEach",
+      "expect",
+      "test",
+      "afterEach",
+      "jest",
+      "beforeAll",
+      "afterAll"
+    ]
+  }
+}

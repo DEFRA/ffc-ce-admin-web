@@ -1,0 +1,9 @@
+environment: development
+container:
+  command: ["/bin/sh","-c"]
+  args: ["node index"]
+  allowPrivilegeEscalation: true
+  readOnlyRootFilesystem: false
+ingress:
+  endpoint:
+replicaCount: 1

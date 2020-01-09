@@ -1,0 +1,26 @@
+{{- if .Values.ingress.alb }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ quote .Values.name }}
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/security-groups: {{ quote .Values.ingress.alb.securityGroups}}
+    alb.ingress.kubernetes.io/certificate-arn: {{ quote .Values.ingress.alb.arn}}
+    alb.ingress.kubernetes.io/tags: {{ quote .Values.ingress.alb.tags }}
+    external-dns.alpha.kubernetes.io/aws-zone-type-private: "true"
+spec:
+  rules:
+{{- if .Values.ingress.endpoint }}
+  - host: {{ .Values.ingress.endpoint }}.{{ .Values.ingress.server }}
+    http:
+{{ else }}
+  - http:
+{{- end }}
+      paths:
+      - path: /*
+        backend:
+          serviceName: {{ quote .Values.name }}
+          servicePort: {{ .Values.service.port }}
+{{- end }}
