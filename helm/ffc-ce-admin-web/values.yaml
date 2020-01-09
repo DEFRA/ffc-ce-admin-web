@@ -1,0 +1,44 @@
+environment: development
+image: ffc-ce-admin-web
+name: ffc-ce-admin-web
+auth:
+imagePullSecret:
+service:
+  port: 80
+  type: ClusterIP
+
+container:
+  imagePullPolicy: IfNotPresent
+  redeployOnChange: update this field to force a change
+  requestMemory: 60Mi
+  requestCpu: 60m
+  limitMemory: 80Mi
+  limitCpu: 80m
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  restartPolicy: Always
+  paymentUrl: http://ffc-ce-payment-orchestrator.ffc-ce
+  cookiePassword:
+  restClientTimeoutMillis: 20000
+  staticCacheTimeoutMillis: 54000
+ingress:
+  endPoint: ffc-ce
+  server: vividcloudsolutions.co.uk
+replicas: 1
+minReadySeconds: 5
+
+readinessProbe:
+  path: /healthy
+  port: 3000
+  initialDelaySeconds: 20
+  periodSeconds: 10
+  failureThreshold: 3
+
+livenessProbe:
+  path: /healthz
+  port: 3000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  failureThreshold: 3
