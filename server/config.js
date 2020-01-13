@@ -6,7 +6,6 @@ const schema = Joi.object({
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   staticCacheTimeoutMillis: Joi.number().default(15 * 60 * 1000),
   restClientTimeoutMillis: Joi.number().default(20000),
-  paymentUrl: Joi.string().uri().required(),
   // Caching
   cookieTimeout: Joi.number().min(60000).default(10800000),
   cookiePassword: Joi.string().min(32).required()
@@ -18,7 +17,6 @@ const config = {
   env: process.env.NODE_ENV,
   staticCacheTimeoutMillis: process.env.STATIC_CACHE_TIMEOUT_IN_MILLIS,
   restClientTimeoutMillis: process.env.REST_CLIENT_TIMEOUT_IN_MILLIS,
-  paymentUrl: process.env.PAYMENT_URL,
   cookiePassword: process.env.COOKIE_PASSWORD
 }
 
