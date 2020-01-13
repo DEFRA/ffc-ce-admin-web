@@ -5,21 +5,17 @@ module.exports = [
   {
     method: 'POST',
     path: '/action',
-    options: {
-      handler: async (request, h) => {
-        const actionResult = actionService.performAction()
-        request.yar.set(cacheKey, actionResult)
-        return h.redirect('/action')
-      }
+    handler: async (request, h) => {
+      const actionResult = actionService.performAction()
+      request.yar.set(cacheKey, actionResult)
+      return h.redirect('/action')
     }
   }, {
     method: 'GET',
     path: '/action',
-    options: {
-      handler: async (request, h) => {
-        const actionResult = request.yar.get(cacheKey)
-        return h.view('action', { actionResult })
-      }
+    handler: async (request, h) => {
+      const actionResult = request.yar.get(cacheKey)
+      return h.view('action', { actionResult })
     }
   }
 ]
