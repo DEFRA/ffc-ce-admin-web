@@ -1,5 +1,5 @@
 
-async function performAction (email) {
+function performAction () {
   return { success: true }
 }
 

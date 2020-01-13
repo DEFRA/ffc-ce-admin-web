@@ -6,6 +6,6 @@
 
 {% block content %}
   <div class="govuk-body">
-    Action completed
+    Action was {{ "successful" if actionResult.success else "unsuccessful" }}
   </div>
 {% endblock %}

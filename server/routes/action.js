@@ -1,12 +1,25 @@
 const actionService = require('../services/actionService')
 
-module.exports = {
-  method: 'POST',
-  path: '/action',
-  options: {
-    handler: async (request, h) => {
-      actionService.performAction()
-      return h.view('action')
+const cacheKey = 'action'
+module.exports = [
+  {
+    method: 'POST',
+    path: '/action',
+    options: {
+      handler: async (request, h) => {
+        const actionResult = actionService.performAction()
+        request.yar.set(cacheKey, actionResult)
+        return h.redirect('/action')
+      }
+    }
+  }, {
+    method: 'GET',
+    path: '/action',
+    options: {
+      handler: async (request, h) => {
+        const actionResult = request.yar.get(cacheKey)
+        return h.view('action', { actionResult })
+      }
     }
   }
-}
+]
