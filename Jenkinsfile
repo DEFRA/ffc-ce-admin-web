@@ -75,7 +75,7 @@ node {
     if (pr != '') {
       stage('Helm install') {
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, getExtraCommands(pr, containerTag, ingressServer))
-          echo "Build available for review at https://ffc-ce-admin-web-$containerTag.$ingressServer"
+          echo "Build available for review at https://ffc-aweb-$containerTag.$ingressServer"
       }
       
     }

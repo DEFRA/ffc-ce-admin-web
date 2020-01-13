@@ -17,10 +17,10 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">FFC Calculation Engine</h1>      
+      <h1 class="govuk-heading-xl">FFC Calculation Engine Admin</h1>      
 
       <p class="govuk-body">
-        This is a demo application for the FFC Calculation Engine.
+        This is a demo admin console for the FFC Calculation Engine.
       </p>
 
       {{ govukWarningText({
@@ -29,11 +29,11 @@
       }) }}
 
 
-    <form method="POST" action="/payment">
+    <form method="POST" action="/actions">
       {{ govukButton({
         classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
         isStartButton: true,
-        text: "Start Calculation"
+        text: "Configure actions"
       }) }}
     </form>
       <h2 class="govuk-heading-m">Before you start</h2>

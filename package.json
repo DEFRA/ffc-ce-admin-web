@@ -1,6 +1,6 @@
 {
   "name": "ffc-ce-admin-web",
-  "description": "Digital service for calculation engine.",
+  "description": "Admin interface for the calculation engine digital service",
   "version": "0.0.1",
   "homepage": "https://github.com/DEFRA/ffc-ce-admin-web",
   "repository": {
@@ -20,13 +20,13 @@
   },
   "author": "Defra DDTS",
   "contributors": [
-    "John Watson john.watson2@rpa.gov.uk",
-    "Mark Harrop mark.harrop@defra.gov.uk",
-    "Matthew Collins matthew.collins@defra.gov.uk",
-    "David Bingham david.bingham@defra.gov.uk",
-    "Neil McLaughlin neil.mclaughlin@defra.gov.uk",
-    "Paul Andrews paul.andrews@defra.gov.uk",
-    "Phil Benson phil.benson@defra.gov.uk"
+    "John Watson <john.watson2@rpa.gov.uk>",
+    "Mark Harrop <mark.harrop@defra.gov.uk>",
+    "Matthew Collins <matthew.collins@defra.gov.uk>",
+    "David Bingham <david.bingham@defra.gov.uk>",
+    "Neil McLaughlin <neil.mclaughlin@defra.gov.uk>",
+    "Paul Andrews <paul.andrews@defra.gov.uk>",
+    "Phil Benson <phil.benson@defra.gov.uk>"
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
