@@ -27,16 +27,16 @@ module.exports = [{
 }, {
   method: 'GET',
   path: '/assets/{path*}',
+  handler: {
+    directory: {
+      path: [
+        'server/public/static',
+        'server/public/build',
+        'node_modules/govuk-frontend/govuk/assets'
+      ]
+    }
+  },
   options: {
-    handler: {
-      directory: {
-        path: [
-          'server/public/static',
-          'server/public/build',
-          'node_modules/govuk-frontend/govuk/assets'
-        ]
-      }
-    },
     cache: {
       expiresIn: config.staticCacheTimeoutMillis,
       privacy: 'private'

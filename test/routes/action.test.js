@@ -28,7 +28,7 @@ describe('Action test', () => {
   let createServer
   let server
 
-  beforeAll(async () => {
+  beforeAll(() => {
     createMocks()
     createServer = require('../../server/createServer')
   })

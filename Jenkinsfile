@@ -33,7 +33,7 @@ def getExtraCommands(pr, containerTag, ingressServer) {
       /ingress.alb.tags="$albTags"/,
       /ingress.alb.arn="$albArn"/,
       /ingress.alb.securityGroups="$albSecurityGroups"/,
-      /ingress.endpoint="ffc-ce-admin-web-$containerTag"/,
+      /ingress.endpoint="ce-admin-$containerTag"/,
       /ingress.server="$ingressServer"/
     ].join(',')
 
@@ -75,7 +75,7 @@ node {
     if (pr != '') {
       stage('Helm install') {
           defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, getExtraCommands(pr, containerTag, ingressServer))
-          echo "Build available for review at https://ffc-aweb-$containerTag.$ingressServer"
+          echo "Build available for review at https://ce-admin-$containerTag.$ingressServer"
       }
       
     }

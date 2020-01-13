@@ -6,5 +6,5 @@ container:
   allowPrivilegeEscalation: false
   imagePullPolicy: Always
 ingress:
-  endPoint: ffc-ce-admin-web
+  endPoint: ce-admin
   server: ffc.aws-int.defra.cloud

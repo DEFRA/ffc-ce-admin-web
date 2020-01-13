@@ -2,7 +2,7 @@ describe('Healthy test', () => {
   let createServer
   let server
 
-  beforeAll(async () => {
+  beforeAll(() => {
     createServer = require('../../server/createServer')
   })
 
