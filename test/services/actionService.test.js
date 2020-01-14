@@ -6,4 +6,10 @@ describe('actionService', () => {
       expect.objectContaining({ success: true })
     )
   })
+
+  test('action fails', () => {
+    expect(actionService.performAction({ makeActionFail: true })).toEqual(
+      expect.objectContaining({ success: false })
+    )
+  })
 })

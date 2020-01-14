@@ -6,7 +6,7 @@ module.exports = [
     method: 'POST',
     path: '/action',
     handler: async (request, h) => {
-      const actionResult = actionService.performAction()
+      const actionResult = actionService.performAction(request.payload)
       request.yar.set(cacheKey, actionResult)
       return h.redirect('/action')
     }

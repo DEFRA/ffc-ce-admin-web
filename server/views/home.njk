@@ -3,6 +3,7 @@
 {% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -30,6 +31,15 @@
 
 
     <form method="POST" action="/action">
+      {{ govukCheckboxes({
+        name: "makeActionFail",
+        items: [
+          {
+            value: "fail",
+            text: "Make action fail?"
+          }
+        ]
+      })}}
       {{ govukButton({
         classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
         isStartButton: true,
