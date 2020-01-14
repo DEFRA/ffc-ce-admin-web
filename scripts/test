@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+projectRoot="$(a="/$0"; a=${a%/*}; a=${a:-.}; a=${a#/}/; cd "$a/.." || return; pwd)"
+
+(
+  cd "${projectRoot}"
+
+  docker-compose -f docker-compose.yaml -f docker-compose.test.yaml down -v
+  docker-compose -f docker-compose.yaml -f docker-compose.test.yaml build
+  docker-compose -f docker-compose.yaml -f docker-compose.test.yaml run ffc-ce-admin-web
+)

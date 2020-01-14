@@ -1,0 +1,75 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ quote .Values.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ quote .Values.name }}
+      annotations:
+        redeployOnChange: {{ quote .Values.container.redeployOnChange }}
+    spec:
+      restartPolicy: {{ quote .Values.container.restartPolicy }}
+      {{- if .Values.imagePullSecret }}
+      imagePullSecrets:
+      - name: {{ quote .Values.imagePullSecret }}
+      {{- end }}
+      containers:
+      - name: {{ quote .Values.name }}
+        image: {{ quote .Values.image }}
+        {{- if .Values.container.command }}
+        {{- with .Values.container.command }}
+        command:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- with .Values.container.args }}
+        args:
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
+        {{- end }}
+        imagePullPolicy: {{ quote .Values.container.imagePullPolicy }}
+        securityContext:
+          runAsUser: {{ .Values.container.runAsUser }}
+          runAsNonRoot: {{ .Values.container.runAsNonRoot }}
+          readOnlyRootFilesystem: {{ .Values.container.readOnlyRootFilesystem }}
+          allowPrivilegeEscalation: {{ .Values.container.allowPrivilegeEscalation }}
+        env:
+        - name: NODE_ENV
+          value: {{ quote .Values.environment }}
+        - name: PORT
+          value: "3000"
+        - name: COOKIE_PASSWORD
+          value: {{ quote .Values.container.cookiePassword }}
+        - name: REST_CLIENT_TIMEOUT_IN_MILLIS
+          value: {{ quote .Values.container.restClientTimeoutMillis }}
+        - name: STATIC_CACHE_TIMEOUT_IN_MILLIS
+          value: {{ quote .Values.container.staticCacheTimeoutMillis }}
+        ports:
+        - name: http
+          containerPort: 3000
+          protocol: TCP
+        resources:
+          requests:
+            memory: {{ quote .Values.container.requestMemory }}
+            cpu: {{ quote .Values.container.requestCpu }}
+          limits:
+            memory: {{ quote .Values.container.limitMemory }}
+            cpu: {{ quote .Values.container.limitCpu }}
+        livenessProbe:
+          httpGet:
+            path: {{ quote .Values.livenessProbe.path }}
+            port: {{ .Values.livenessProbe.port }}
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: {{ quote .Values.readinessProbe.path }}
+            port: {{ .Values.readinessProbe.port }}
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}

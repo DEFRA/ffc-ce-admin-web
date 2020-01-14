@@ -1,0 +1,15 @@
+const actionService = require('../../server/services/actionService')
+
+describe('actionService', () => {
+  test('action succeeds', () => {
+    expect(actionService.performAction()).toEqual(
+      expect.objectContaining({ success: true })
+    )
+  })
+
+  test('action fails', () => {
+    expect(actionService.performAction({ makeActionFail: true })).toEqual(
+      expect.objectContaining({ success: false })
+    )
+  })
+})

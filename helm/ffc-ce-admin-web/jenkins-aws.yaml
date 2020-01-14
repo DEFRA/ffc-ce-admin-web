@@ -1,0 +1,10 @@
+environment: production
+service:
+  port: 443
+  type: NodePort
+container:
+  allowPrivilegeEscalation: false
+  imagePullPolicy: Always
+ingress:
+  endPoint: ce-admin
+  server: ffc.aws-int.defra.cloud

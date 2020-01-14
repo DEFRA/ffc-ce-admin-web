@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  ffc-ce-admin-web:
+    build: .
+    image: ffc-ce-admin-web
+    command: npm run start:watch
+    environment:
+      COOKIE_PASSWORD: aPasswordNotUsedAnywhereOnlyLocallyWhenTesting
+    volumes:
+      - node_modules:/usr/src/app/node_modules
+      - .:/usr/src/app
+
+volumes:
+  node_modules:
