@@ -5,5 +5,5 @@ container:
   allowPrivilegeEscalation: true
   readOnlyRootFilesystem: false
 ingress:
-  endpoint:
+  endPoint:
 replicaCount: 1
