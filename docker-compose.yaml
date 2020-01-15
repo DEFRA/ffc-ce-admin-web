@@ -6,6 +6,7 @@ services:
     image: ffc-ce-admin-web
     command: npm run start:watch
     environment:
+      ACTIONS_URL: http://ffc-ce-payment-orchestrator:3002
       COOKIE_PASSWORD: aPasswordNotUsedAnywhereOnlyLocallyWhenTesting
     volumes:
       - node_modules:/usr/src/app/node_modules

@@ -19,6 +19,7 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   restartPolicy: Always
+  actionsUrl: http://ffc-ce-payment-orchestrator.ffc-ce
   cookiePassword:
   restClientTimeoutMillis: 20000
   staticCacheTimeoutMillis: 54000

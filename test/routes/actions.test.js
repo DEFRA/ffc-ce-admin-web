@@ -1,19 +1,17 @@
 // let actionService
 require('../../server/services/actionsService')
-const mockActionServiceResult = {
-  actions: [
-    {
-      id: 'ID1',
-      description: 'Test',
-      rules: [{
-        id: 1,
-        description: 'Test rule',
-        enabled: true,
-        facts: []
-      }]
-    }
-  ]
-}
+const mockActionServiceResult = [
+  {
+    id: 'ID1',
+    description: 'Test',
+    rules: [{
+      id: 1,
+      description: 'Test rule',
+      enabled: true,
+      facts: []
+    }]
+  }
+]
 
 const mockActionsService = {
   getActions: jest.fn().mockResolvedValue(mockActionServiceResult)

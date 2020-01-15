@@ -6,7 +6,7 @@ const schema = Joi.object({
   env: Joi.string().valid('development', 'test', 'production').default('development'),
   staticCacheTimeoutMillis: Joi.number().default(15 * 60 * 1000),
   restClientTimeoutMillis: Joi.number().default(20000),
-  actionsUrl: Joi.string().uri().default('http://ffc-ce-payment-orchestrator:3002'),
+  actionsUrl: Joi.string().uri().required(),
   // Caching
   cookieTimeout: Joi.number().min(60000).default(10800000),
   cookiePassword: Joi.string().min(32).required()
