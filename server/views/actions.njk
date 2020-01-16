@@ -1,0 +1,85 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "#"
+      }]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">FFC Calculation Engine Administration</h1>
+
+      <div class="govuk-body">
+        <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
+          {% for item in model.items %}
+            <div class="govuk-accordion__section ">
+              <div class="govuk-accordion__section-header">
+                <h2 class="govuk-accordion__section-heading">
+                  <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                    {{ item.heading }}
+                  </span>
+                </h2>
+              </div>
+              <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
+                <dl class="govuk-summary-list">
+                  {% for rule in item.rules %}
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">
+                        Rule
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        {{ rule.description }}
+                      </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">
+                        Facts
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        {% for fact in rule.facts %}
+                          <div>{{ fact.description }}</div>
+                        {% endfor %}
+                      </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key">
+                        Enabled
+                      </dt>
+                      <dd class="govuk-summary-list__value">
+                        {% if rule.enabled %}
+                          Yes
+                        {% else %}
+                          No
+                        {% endif %}
+                      </dd>
+                      <dd class="govuk-summary-list__actions">
+                        <a class="govuk-link" href="#">
+                          Change<span class="govuk-visually-hidden">
+                            enabled</span>
+                        </a>
+                      </dd>
+                    </div>
+                    <div class="govuk-summary-list__row">
+                      <dt class="govuk-summary-list__key"></dt>
+                      <dd class="govuk-summary-list__value"></dd>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}

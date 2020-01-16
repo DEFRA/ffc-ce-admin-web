@@ -22,8 +22,8 @@ metadata:
   name: {{ quote .Values.name }}
 spec:
   rules:
-{{- if .Values.ingress.endpoint }}
-  - host: {{ .Values.ingress.endpoint }}.{{ .Values.ingress.server }}
+{{- if .Values.ingress.endPoint }}
+  - host: {{ .Values.ingress.endPoint }}.{{ .Values.ingress.server }}
     http:
 {{ else }}
   - http:

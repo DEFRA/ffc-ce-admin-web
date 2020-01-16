@@ -19,11 +19,12 @@ container:
   readOnlyRootFilesystem: true
   allowPrivilegeEscalation: false
   restartPolicy: Always
+  actionsUrl: http://ffc-ce-payment-orchestrator.ffc-ce
   cookiePassword:
   restClientTimeoutMillis: 20000
   staticCacheTimeoutMillis: 54000
 ingress:
-  endPoint: ffc-ce
+  endPoint: ffc-ce-admin
   server: vividcloudsolutions.co.uk
 replicas: 1
 minReadySeconds: 5

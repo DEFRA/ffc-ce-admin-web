@@ -46,6 +46,8 @@ spec:
           value: {{ quote .Values.container.cookiePassword }}
         - name: REST_CLIENT_TIMEOUT_IN_MILLIS
           value: {{ quote .Values.container.restClientTimeoutMillis }}
+        - name: ACTIONS_URL
+          value: {{ quote .Values.container.actionsUrl }}
         - name: STATIC_CACHE_TIMEOUT_IN_MILLIS
           value: {{ quote .Values.container.staticCacheTimeoutMillis }}
         ports:
