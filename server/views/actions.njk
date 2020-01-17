@@ -32,42 +32,63 @@
                 </h2>
               </div>
               <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
-                <dl class="govuk-summary-list">
+                <dl class="govuk-summary-list govuk-summary-list--no-border">
                   {% for rule in item.rules %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
+                    {% if loop.index % 2 %}
+                      <div class="govuk-summary-list__row" style="background-color: #f3f2f1">
+                    {% else %}
+                      <div class="govuk-summary-list__row">
+                    {% endif %}
+                      <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Rule
                       </dt>
-                      <dd class="govuk-summary-list__value">
+                      <dd class="govuk-summary-list__value" style="padding-left: 10px">
                         {{ rule.description }}
                       </dd>
+                      <dd class="govuk-summary-list__actions"></dd>
                     </div>
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
+                    {% if loop.index % 2 %}
+                      <div class="govuk-summary-list__row" style="background-color: #f3f2f1">
+                    {% else %}
+                      <div class="govuk-summary-list__row">
+                    {% endif %}
+                      <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Facts
                       </dt>
-                      <dd class="govuk-summary-list__value">
+                      <dd class="govuk-summary-list__value" style="padding-left: 10px">
                         {% for fact in rule.facts %}
                           <div>{{ fact.description }}</div>
                         {% endfor %}
                       </dd>
+                      <dd class="govuk-summary-list__actions"></dd>
                     </div>
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
+                    {% if loop.index % 2 %}
+                      <div class="govuk-summary-list__row" style="background-color: #f3f2f1">
+                    {% else %}
+                      <div class="govuk-summary-list__row">
+                    {% endif %}
+                      <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Enabled
                       </dt>
-                      <dd class="govuk-summary-list__value">
+                      <dd class="govuk-summary-list__value" style="padding-left: 10px">
                         {% if rule.enabled %}
                           Yes
                         {% else %}
                           No
                         {% endif %}
                       </dd>
-                      <dd class="govuk-summary-list__actions">
-                        <a class="govuk-link" href="#">
-                          Change<span class="govuk-visually-hidden">
-                            enabled</span>
-                        </a>
+                      <dd class="govuk-summary-list__actions" style="padding-right: 10px">
+                        <form method="POST" action="/toggle" style="padding-bottom: -20px">
+                          {% if rule.enabled %}
+                            {{ govukButton({
+                              text: "Disable"
+                            }) }}
+                          {% else %}
+                            {{ govukButton({
+                              text: "Enable"
+                            }) }}
+                          {% endif %}
+                        </form>
                       </dd>
                     </div>
                     <div class="govuk-summary-list__row">
