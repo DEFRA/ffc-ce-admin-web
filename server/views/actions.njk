@@ -4,13 +4,14 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
     items: [
       {
         text: "Home",
-        href: "#"
+        href: "/"
       }]
   }) }}
 {% endblock %}
@@ -32,13 +33,16 @@
                 </h2>
               </div>
               <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
+                {{ govukErrorMessage({
+                  text: model.errorMessage
+                }) }}
                 <dl class="govuk-summary-list govuk-summary-list--no-border">
                   {% for rule in item.rules %}
+                    {% set backgroundColour = '"background-color: white"' %}
                     {% if loop.index % 2 %}
-                      <div class="govuk-summary-list__row" style="background-color: #f3f2f1">
-                    {% else %}
-                      <div class="govuk-summary-list__row">
+                      {% set backgroundColour = '"background-color: #f3f2f1"' %}
                     {% endif %}
+                    <div class="govuk-summary-list__row" style={{ backgroundColour|safe }}>
                       <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Rule
                       </dt>
@@ -47,11 +51,7 @@
                       </dd>
                       <dd class="govuk-summary-list__actions"></dd>
                     </div>
-                    {% if loop.index % 2 %}
-                      <div class="govuk-summary-list__row" style="background-color: #f3f2f1">
-                    {% else %}
-                      <div class="govuk-summary-list__row">
-                    {% endif %}
+                    <div class="govuk-summary-list__row" style={{ backgroundColour|safe }}>
                       <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Facts
                       </dt>
@@ -62,11 +62,7 @@
                       </dd>
                       <dd class="govuk-summary-list__actions"></dd>
                     </div>
-                    {% if loop.index % 2 %}
-                      <div class="govuk-summary-list__row" style="background-color: #f3f2f1">
-                    {% else %}
-                      <div class="govuk-summary-list__row">
-                    {% endif %}
+                    <div class="govuk-summary-list__row" style={{ backgroundColour|safe }}>
                       <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Enabled
                       </dt>
@@ -78,22 +74,24 @@
                         {% endif %}
                       </dd>
                       <dd class="govuk-summary-list__actions" style="padding-right: 10px">
-                        <form method="POST" action="/toggle" style="padding-bottom: -20px">
+                        <form method="POST" action="/actions" style="padding-bottom: -20px">
+                          <input type="hidden" name="actionID" value={{ item.actionID }}>
+                          <input type="hidden" name="ruleID" value={{ rule.id }}>
+                          <input type="hidden" name="enabled" value={{ not rule.enabled }}>
                           {% if rule.enabled %}
                             {{ govukButton({
-                              text: "Disable"
+                              text: "Disable",
+                              classes: "govuk-button--warning",
+                              preventDoubleClick: true
                             }) }}
                           {% else %}
                             {{ govukButton({
-                              text: "Enable"
+                              text: "Enable",
+                              preventDoubleClick: true
                             }) }}
                           {% endif %}
                         </form>
                       </dd>
-                    </div>
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key"></dt>
-                      <dd class="govuk-summary-list__value"></dd>
                     </div>
                   {% endfor %}
                 </div>
