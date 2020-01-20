@@ -38,11 +38,12 @@
                 }) }}
                 <dl class="govuk-summary-list govuk-summary-list--no-border">
                   {% for rule in item.rules %}
+                    {% set ruleID = item.actionID + "_" + rule.id %}
                     {% set backgroundColour = '"background-color: white"' %}
                     {% if loop.index % 2 %}
                       {% set backgroundColour = '"background-color: #f3f2f1"' %}
                     {% endif %}
-                    <div class="govuk-summary-list__row" style={{ backgroundColour|safe }}>
+                    <div id={{ ruleID }} class="govuk-summary-list__row" style={{ backgroundColour|safe }}>
                       <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Rule
                       </dt>
@@ -74,7 +75,7 @@
                         {% endif %}
                       </dd>
                       <dd class="govuk-summary-list__actions" style="padding-right: 10px">
-                        <form method="POST" action="/actions" style="padding-bottom: -20px">
+                        <form method="POST" action={{ "/actions#" + ruleID }} style="padding-bottom: -20px">
                           <input type="hidden" name="actionID" value={{ item.actionID }}>
                           <input type="hidden" name="ruleID" value={{ rule.id }}>
                           <input type="hidden" name="enabled" value={{ not rule.enabled }}>
