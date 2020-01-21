@@ -27,7 +27,9 @@ module.exports = {
           })
 
           // The return the `500` view
-          return h.view('500').code(statusCode)
+          console.log('ERROR:')
+          console.log(response.output)
+          return h.view('500', { model: response.output }).code(statusCode)
         }
         return h.continue
       })

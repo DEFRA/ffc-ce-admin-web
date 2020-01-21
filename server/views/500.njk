@@ -7,6 +7,9 @@
         <div class="govuk-grid-column-two-thirds">
           <h1 class="govuk-heading-xl">Sorry, there is a problem with the service</h1>
           <p class="govuk-body">Try again later.</p>
+          <p>Status code: {{ model.statusCode }}</p>
+          <p>Message: {{ model.payload.message }} 
+          <p>Error: {{ model.payload.error }}</p>
         </div>
       </div>
     </div>
