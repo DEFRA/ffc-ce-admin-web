@@ -14,8 +14,7 @@ const mockActionServiceResult = [
 ]
 
 const mockActionsService = {
-  getActions: jest.fn().mockResolvedValue(mockActionServiceResult),
-  toggleRule: jest.fn().mockResolvedValue(mockActionServiceResult)
+  getActions: jest.fn().mockResolvedValue(mockActionServiceResult)
 }
 
 function createMocks () {
@@ -25,30 +24,6 @@ function createMocks () {
 const getRequestOptions = {
   method: 'GET',
   url: '/actions'
-}
-
-const actionID = 'FG1'
-const ruleID = 1
-const enabled = false
-
-const goodPostRequestOptions = {
-  method: 'POST',
-  url: '/actions',
-  payload: {
-    actionID,
-    ruleID,
-    enabled
-  }
-}
-
-const badPostRequestOptions = {
-  method: 'POST',
-  url: '/actions',
-  payload: {
-    actionID,
-    ruleID: 'bad id',
-    enabled
-  }
 }
 
 describe('Actions test', () => {
@@ -73,17 +48,6 @@ describe('Actions test', () => {
   test('GET /actions route gets a 200 response', async () => {
     const getResponse = await server.inject(getRequestOptions)
     expect(getResponse.statusCode).toBe(200)
-  })
-
-  test('POST /actions route calls the actionsService', async () => {
-    await server.inject(goodPostRequestOptions)
-    expect(mockActionsService.toggleRule).toHaveBeenCalledWith(actionID, ruleID, enabled)
-  })
-
-  test('POST /actions route returns error message if malformatted options received', async () => {
-    const postResponse = await server.inject(badPostRequestOptions)
-    expect(postResponse.statusCode).toBe(200)
-    expect(postResponse.payload).toContain('Failed to change rule: invalid data submitted')
   })
 
   afterEach(async () => {

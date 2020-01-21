@@ -3,6 +3,7 @@ const routes = [].concat(
   require('./healthy'),
   require('./healthz'),
   require('./home'),
-  require('./public')
+  require('./public'),
+  require('./toggle-rule')
 )
 module.exports = routes

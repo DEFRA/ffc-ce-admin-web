@@ -10,14 +10,6 @@ async function getActions () {
   return actions || []
 }
 
-async function toggleRule (actionID, ruleID, enabled) {
-  const data = JSON.stringify({ enabled: enabled })
-  await wreck.put(`${config.actionsUrl}/actions/${actionID}/rules/${ruleID}`, { json: true, payload: data })
-  const actions = await getActions()
-  return actions
-}
-
 module.exports = {
-  getActions,
-  toggleRule
+  getActions
 }

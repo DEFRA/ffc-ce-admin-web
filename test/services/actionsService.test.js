@@ -3,17 +3,13 @@ const wreck = require('@hapi/wreck')
 let actionsService
 jest.mock('@hapi/wreck')
 
-let getPayload
-let putPayload
+let payload
 
 function stubWreckCall () {
   wreck.defaults = () => {
     return {
       get: () => {
-        return Promise.resolve({ payload: getPayload })
-      },
-      put: () => {
-        return Promise.resolve({ payload: putPayload })
+        return Promise.resolve({ payload })
       }
     }
   }
@@ -34,13 +30,6 @@ const mockActionServiceResult = {
   ]
 }
 
-const mockToggleRuleResult = {
-  id: 1,
-  description: 'Test rule',
-  enabled: false,
-  facts: []
-}
-
 describe('actionService', () => {
   beforeAll(() => {
     // Test follows the structure of parcels-service.test.js from ffc-ce-web, which says:
@@ -55,7 +44,7 @@ describe('actionService', () => {
   })
 
   test('get actions return JSON', async () => {
-    getPayload = mockActionServiceResult
+    payload = mockActionServiceResult
     const result = await actionsService.getActions()
     expect(result).toBeDefined()
     expect(result.length).toEqual(1)
@@ -63,27 +52,10 @@ describe('actionService', () => {
   })
 
   test('get actions returns empty array for empty payload', async () => {
-    getPayload = undefined
+    payload = undefined
     const result = await actionsService.getActions()
     expect(result).toBeDefined()
     expect(result.length).toEqual(0)
-  })
-
-  test('toggle rule return JSON', async () => {
-    getPayload = mockActionServiceResult
-    putPayload = mockToggleRuleResult
-    const result = await actionsService.toggleRule('FG1', 1, false)
-    expect(result).toBeDefined()
-    expect(result.length).toEqual(1)
-    expect(result[0]).toEqual(mockActionServiceResult.actions[0])
-  })
-
-  test('toggle rule still returns list of actions for empty put payload', async () => {
-    getPayload = mockActionServiceResult
-    putPayload = undefined
-    const result = await actionsService.toggleRule('Bad Id', 1, false)
-    expect(result.length).toEqual(1)
-    expect(result[0]).toEqual(mockActionServiceResult.actions[0])
   })
 
   afterAll(() => {

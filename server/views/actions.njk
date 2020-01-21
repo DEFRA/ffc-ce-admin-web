@@ -1,25 +1,12 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
-
-{% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: "/"
-      }]
-  }) }}
-{% endblock %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl">FFC Calculation Engine Administration</h1>
+      <h1 class="govuk-heading-xl">Select actions rule</h1>
 
       <div class="govuk-body">
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
@@ -36,7 +23,7 @@
                 {{ govukErrorMessage({
                   text: model.errorMessage
                 }) }}
-                <dl class="govuk-summary-list govuk-summary-list--no-border">
+                <dl class="govuk-summary-list--no-border">
                   {% for rule in item.rules %}
                     {% set ruleID = item.actionID + "_" + rule.id %}
                     {% set backgroundColour = 'background-color: white' %}
@@ -75,24 +62,15 @@
                         {% endif %}
                       </dd>
                       <dd class="govuk-summary-list__actions" style="padding-right: 10px">
-                        <form method="POST" action={{ "/actions#" + ruleID }} style="padding-bottom: -20px">
-                          <input type="hidden" name="actionID" value={{ item.actionID }}>
-                          <input type="hidden" name="ruleID" value={{ rule.id }}>
-                          <input type="hidden" name="enabled" value={{ not rule.enabled }}>
-                          {% if rule.enabled %}
-                            {{ govukButton({
-                              text: "Disable",
-                              classes: "govuk-button--warning",
-                              preventDoubleClick: true
-                            }) }}
-                          {% else %}
-                            {{ govukButton({
-                              text: "Enable",
-                              preventDoubleClick: true
-                            }) }}
-                          {% endif %}
-                        </form>
+                        <a class="govuk-link" href="/toggle-rule?actionID={{ item.actionID }}&ruleID={{ rule.id }}&actionDescription={{ item.heading }}">
+                          Change<span class="govuk-visually-hidden">rule {{ ruleID }}</span>
+                        </a>                        
                       </dd>
+                    </div>
+                    <div class="govuk-summary-list__row" >
+                      <dd class="govuk-summary-list__key"></dd>
+                      <dd class="govuk-summary-list__value"></dd>
+                      <dd class="govuk-summary-list__actions"></dd>
                     </div>
                   {% endfor %}
                 </div>
