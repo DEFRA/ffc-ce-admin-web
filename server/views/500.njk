@@ -9,6 +9,10 @@
           <p class="govuk-body">Status code: {{ model.statusCode }}</p>
           <p class="govuk-body">Message: {{ model.payload.message }} 
           <p class="govuk-body">Error: {{ model.payload.error }}</p>
+          <p class="govuk-body">Headers:</p> 
+          {% for header, value in model.headers %}
+            <p class="govuk-body">{{ header }}: {{ value }}</p> 
+          {% endfor %}
         </div>
       </div>
     </div>
