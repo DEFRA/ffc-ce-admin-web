@@ -1,10 +1,11 @@
+const wreck = require('@hapi/wreck')
+
 let actionsService
 jest.mock('@hapi/wreck')
 
 let payload
 
 function stubWreckCall () {
-  const wreck = require('@hapi/wreck')
   wreck.defaults = () => {
     return {
       get: () => {

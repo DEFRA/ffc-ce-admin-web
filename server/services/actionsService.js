@@ -10,4 +10,6 @@ async function getActions () {
   return actions || []
 }
 
-module.exports = { getActions }
+module.exports = {
+  getActions
+}

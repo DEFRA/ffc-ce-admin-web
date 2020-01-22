@@ -21,7 +21,7 @@ function createMocks () {
   jest.mock('../../server/services/actionsService', () => mockActionsService)
 }
 
-const requestOptions = {
+const getRequestOptions = {
   method: 'GET',
   url: '/actions'
 }
@@ -41,12 +41,12 @@ describe('Actions test', () => {
   })
 
   test('GET /actions route calls the actionsService', async () => {
-    await server.inject(requestOptions)
+    await server.inject(getRequestOptions)
     expect(mockActionsService.getActions).toHaveBeenCalled()
   })
 
   test('GET /actions route gets a 200 response', async () => {
-    const getResponse = await server.inject(requestOptions)
+    const getResponse = await server.inject(getRequestOptions)
     expect(getResponse.statusCode).toBe(200)
   })
 

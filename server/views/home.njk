@@ -1,62 +1,23 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-
-{% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: "#"
-      }]
-  }) }}
-{% endblock %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-xl">FFC Calculation Engine Admin</h1>
+      <h1 class="govuk-heading-xl">Agreements calculator administration</h1>
 
       <p class="govuk-body">
-        This is a demo admin console for the FFC Calculation Engine.
+        This is an administration console to configure action rules for the agreements calculator.
       </p>
 
-      {{ govukWarningText({
-        text: "This is not a real service and is for demonstration and investigation purposes only.",
-        iconFallbackText: "Warning"
-      }) }}
-
-
-    <form method="GET" action="/actions">
-      {{ govukButton({
-        classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
-        isStartButton: true,
-        text: "Actions page"
-      }) }}
-    </form>
-      <h2 class="govuk-heading-m">Before you start</h2>
-
-      <p class="govuk-body">This is a proof of concept sample application. Calculations do not reflect available funding.</p>
-    </div>
-    <div class="govuk-grid-column-one-third">
-      <aside class="app-related-items" role="complementary">
-        <h2 class="govuk-heading-m" id="subsection-title">
-          Useful links
-        </h2>
-        <nav role="navigation" aria-labelledby="subsection-title">
-          <ul class="govuk-list govuk-!-font-size-16">
-            <li>
-              <a class="govuk-link" href="/">
-                Home
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
+      <form method="GET" action="/actions">
+        {{ govukButton({
+          classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
+          isStartButton: true,
+          text: "Configure action rules"
+        }) }}
+      </form>
     </div>
   </div>
 {% endblock %}

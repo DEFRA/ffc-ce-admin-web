@@ -4,12 +4,14 @@ function actionsModel (actions, errorMessage) {
   const items = actions.map(action => {
     return {
       heading: `${action.id}: ${action.description}`,
+      actionID: action.id,
       rules: action.rules
     }
   })
   return {
     id: actionId,
-    items
+    items,
+    errorMessage: errorMessage || ''
   }
 }
 

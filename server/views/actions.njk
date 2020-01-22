@@ -1,24 +1,12 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
-{% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: "#"
-      }]
-  }) }}
-{% endblock %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl">FFC Calculation Engine Administration</h1>
+      <h1 class="govuk-heading-xl">Select actions rule</h1>
 
       <div class="govuk-body">
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
@@ -32,47 +20,57 @@
                 </h2>
               </div>
               <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
-                <dl class="govuk-summary-list">
+                {{ govukErrorMessage({
+                  text: model.errorMessage
+                }) }}
+                <dl class="govuk-summary-list--no-border">
                   {% for rule in item.rules %}
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
+                    {% set ruleID = item.actionID + "_" + rule.id %}
+                    {% set backgroundColour = 'background-color: white' %}
+                    {% if loop.index % 2 %}
+                      {% set backgroundColour = 'background-color: #f3f2f1' %}
+                    {% endif %}
+                    <div id={{ ruleID }} class="govuk-summary-list__row" style="{{ backgroundColour }}">
+                      <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Rule
                       </dt>
-                      <dd class="govuk-summary-list__value">
+                      <dd class="govuk-summary-list__value" style="padding-left: 10px">
                         {{ rule.description }}
                       </dd>
+                      <dd class="govuk-summary-list__actions"></dd>
                     </div>
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
+                    <div class="govuk-summary-list__row" style="{{ backgroundColour }}">
+                      <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Facts
                       </dt>
-                      <dd class="govuk-summary-list__value">
+                      <dd class="govuk-summary-list__value" style="padding-left: 10px">
                         {% for fact in rule.facts %}
                           <div>{{ fact.description }}</div>
                         {% endfor %}
                       </dd>
+                      <dd class="govuk-summary-list__actions"></dd>
                     </div>
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key">
+                    <div class="govuk-summary-list__row" style="{{ backgroundColour }}">
+                      <dt class="govuk-summary-list__key" style="padding-left: 10px">
                         Enabled
                       </dt>
-                      <dd class="govuk-summary-list__value">
+                      <dd class="govuk-summary-list__value" style="padding-left: 10px">
                         {% if rule.enabled %}
                           Yes
                         {% else %}
                           No
                         {% endif %}
                       </dd>
-                      <dd class="govuk-summary-list__actions">
-                        <a class="govuk-link" href="#">
-                          Change<span class="govuk-visually-hidden">
-                            enabled</span>
-                        </a>
+                      <dd class="govuk-summary-list__actions" style="padding-right: 10px">
+                        <a class="govuk-link" href="/toggle-rule?actionID={{ item.actionID }}&ruleID={{ rule.id }}&actionDescription={{ item.heading }}">
+                          Change<span class="govuk-visually-hidden">rule {{ ruleID }}</span>
+                        </a>                        
                       </dd>
                     </div>
-                    <div class="govuk-summary-list__row">
-                      <dt class="govuk-summary-list__key"></dt>
+                    <div class="govuk-summary-list__row" >
+                      <dd class="govuk-summary-list__key"></dd>
                       <dd class="govuk-summary-list__value"></dd>
+                      <dd class="govuk-summary-list__actions"></dd>
                     </div>
                   {% endfor %}
                 </div>

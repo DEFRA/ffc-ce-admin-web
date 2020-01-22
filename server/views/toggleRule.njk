@@ -1,0 +1,73 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {% if model.rule.enabled %}
+        <h1 class="govuk-heading-xl">Disable actions rule</h1>
+      {% else %}
+        <h1 class="govuk-heading-xl">Enable actions rule</h1>
+      {% endif %}
+      
+      <div class="govuk-body">
+        <h2 class="govuk-heading-m">{{ model.action.description }}</h3>
+        <dl class="govuk-summary-list--no-border">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Rule
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{ model.rule.description }}
+            </dd>          
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Facts
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {% for fact in model.rule.facts %}
+                <div>{{ fact.description }}</div>
+              {% endfor %}
+            </dd>          
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Enabled
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {% if model.rule.enabled %}
+                Yes
+              {% else %}
+                No
+              {% endif %}
+            </dd>
+          </div>  
+        </dl>
+        <form method="POST" action="/toggle-rule">
+          <input type="hidden" name="actionID" value={{ model.action.id }}>
+          <input type="hidden" name="ruleID" value={{ model.rule.id }}>
+          <input type="hidden" name="enabled" value={{ not model.rule.enabled }}>
+          {% set buttonName = "Enable" %}
+          {% if model.rule.enabled %}
+            {% set buttonName = "Disable" %}
+          {% endif %}
+          {{ govukButton({
+            text: buttonName + " Rule",                          
+            name: "update",
+            value: "true",
+            preventDoubleClick: true
+          }) }}
+          {{ govukButton({
+            text: "Cancel",
+            name: "update",
+            value: "false",
+            classes: "govuk-button--secondary govuk-!-margin-left-1"
+          }) }}
+        </form>        
+      </div>
+    </div>
+  </div>
+{% endblock %}
