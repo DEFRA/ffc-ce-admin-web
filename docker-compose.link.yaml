@@ -8,8 +8,6 @@ services:
     networks:
       - default
       - ffc-ce
-    ports:
-      - "3000:3000"
 
 networks:
   ffc-ce:
