@@ -14,3 +14,4 @@ services:
       - ./client/:/usr/src/app/client/
       - ./server/:/usr/src/app/server/
       - ./index.js:/usr/src/app/index.js
+      - ./package.json:/usr/src/app/package.json
