@@ -29,15 +29,19 @@ The following environment variables are required by the application container. V
 
 ## How to run tests
 
-A convenience script is provided to run automated tests in a containerised environment. The test script will cleanup and build the project prior to running the tests.
+A convenience script is provided to run automated tests in a containerised environment. The test script will cleanup and build the project prior to running the tests (use the `--build` or `-b` flag to force a rebuild).
 
 ```
+# Run tests
 ./scripts/test
+
+# Force rebuild and run tests
+./scripts/test -b
 ```
 
 It should be straight forward for the end user to inspect the test scripts so they can call commands individually to avoid a build or cleanup.
 
-A "test watch" compose file is also available, that will rerun the tests in the container when files are edited locally. This may be run via 
+A "test watch" compose file is also available, that will rerun the tests in the container when files are edited locally. This may be run via
 ```
 docker-compose -f docker-compose.yaml -f docker-compose.test.watch.yaml up --force-recreate ffc-ce-admin-web
 ```
@@ -68,7 +72,7 @@ docker-compose build
 
 ### Start and stop the service
 
-Use Docker Compose to run service locally. 
+Use Docker Compose to run service locally.
 
 `docker-compose up`
 
