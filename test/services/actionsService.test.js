@@ -1,30 +1,18 @@
-const wreck = require('@hapi/wreck')
-
 let actionsService
-jest.mock('@hapi/wreck')
 
-let payload
-
-function stubWreckCall () {
-  wreck.defaults = () => {
-    return {
-      get: () => {
-        return Promise.resolve({ payload })
-      }
-    }
-  }
-}
+const wreck = { get: jest.fn() }
 
 describe('actionService', () => {
-  beforeAll(() => {
-    // Test follows the structure of parcels-service.test.js from ffc-ce-web, which says:
-    // "I tried to stub the call before each, but only the return setup in the first test
-    // was returned, despite trying a combination of clear/reset mocks so I resorted to
-    // setting the payload to a local variable that can be changed before each test
-    // https://github.com/facebook/jest/issues/7136
-    // issue was fixed in November. but not perhaps not made it into the lastest version,
-    // though there are still requests on the issue above to reopen the bug"
-    stubWreckCall()
+  beforeEach(() => {
+    jest.resetModules()
+    wreck.get.mockRestore()
+
+    // Setup wreck mocks before requiring actionsService because
+    // actionsService calls wreck.defaults() immediately on load
+    jest.mock('@hapi/wreck')
+    const wreckConstructor = require('@hapi/wreck')
+    wreckConstructor.defaults.mockReturnValue(wreck)
+
     actionsService = require('../../server/services/actionsService')
   })
 
@@ -34,7 +22,7 @@ describe('actionService', () => {
 
   describe('getActions', () => {
     test('returns array of actions provided by remote API', async () => {
-      payload = {
+      const payload = {
         actions: [
           {
             id: 'ID1',
@@ -51,12 +39,13 @@ describe('actionService', () => {
           }
         ]
       }
+      wreck.get.mockResolvedValue({ payload })
       const result = await actionsService.getActions()
       expect(result).toEqual(payload.actions)
     })
 
     test('creates a rule type field using the first item in each rule types array', async () => {
-      payload = {
+      const payload = {
         actions: [
           {
             id: 'ID1',
@@ -80,16 +69,17 @@ describe('actionService', () => {
           }
         ]
       }
+      wreck.get.mockResolvedValue({ payload })
       const result = await actionsService.getActions()
       expect(result).toEqual(expect.any(Array))
       expect(result.length).toBe(1)
       expect(result[0].rules.length).toBe(2)
-      expect(result[0].rules[0].type).toBe('some-type')
-      expect(result[0].rules[1].type).toBe('some-other-type')
+      expect(result[0].rules[0].type).toBe(payload.actions[0].rules[0].types[0])
+      expect(result[0].rules[1].type).toBe(payload.actions[0].rules[1].types[0])
     })
 
     test('does not overwrite an existing rule type field from types array', async () => {
-      payload = {
+      const payload = {
         actions: [
           {
             id: 'ID1',
@@ -107,15 +97,18 @@ describe('actionService', () => {
           }
         ]
       }
+      wreck.get.mockResolvedValue({ payload })
       const result = await actionsService.getActions()
       expect(result).toEqual(expect.any(Array))
       expect(result.length).toBe(1)
       expect(result[0].rules.length).toBe(1)
-      expect(result[0].rules[0].type).toBe('some-type')
+      expect(result[0].rules[0].type).toBe(payload.actions[0].rules[0].type)
+      expect(result[0].rules[0].type).not.toBe(payload.actions[0].rules[0].types[0])
     })
 
     test('returns empty array for empty payload', async () => {
-      payload = undefined
+      const payload = undefined
+      wreck.get.mockResolvedValue({ payload })
       const result = await actionsService.getActions()
       expect(result).toBeDefined()
       expect(result.length).toBe(0)
