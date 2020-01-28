@@ -16,10 +16,6 @@ describe('actionService', () => {
     actionsService = require('../../server/services/actionsService')
   })
 
-  afterAll(() => {
-    jest.unmock('@hapi/wreck')
-  })
-
   describe('getActions', () => {
     test('returns array of actions provided by remote API', async () => {
       const payload = {
