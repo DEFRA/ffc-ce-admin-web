@@ -1,0 +1,56 @@
+<dl class="actions-rule-set govuk-summary-list--no-border">
+  {% for rule in rules %}
+    {% set ruleID = item.actionID + "_" + rule.id %}
+    {% set backgroundColour = 'background-color: white' %}
+
+    {% if loop.index % 2 %}
+      {% set backgroundColour = 'background-color: #f3f2f1' %}
+    {% endif %}
+
+    <div id={{ ruleID }} class="govuk-summary-list__row" style="{{ backgroundColour }}">
+      <dt class="govuk-summary-list__key" style="padding-left: 10px">
+        Rule
+      </dt>
+      <dd class="govuk-summary-list__value" style="padding-left: 10px">
+        {{ rule.description }}
+      </dd>
+      <dd class="govuk-summary-list__actions"></dd>
+    </div>
+
+    <div class="govuk-summary-list__row" style="{{ backgroundColour }}">
+      <dt class="govuk-summary-list__key" style="padding-left: 10px">
+        Facts
+      </dt>
+      <dd class="govuk-summary-list__value" style="padding-left: 10px">
+        {% for fact in rule.facts %}
+          <div>{{ fact.description }}</div>
+        {% endfor %}
+      </dd>
+      <dd class="govuk-summary-list__actions"></dd>
+    </div>
+
+    <div class="govuk-summary-list__row" style="{{ backgroundColour }}">
+      <dt class="govuk-summary-list__key" style="padding-left: 10px">
+        Enabled
+      </dt>
+      <dd class="govuk-summary-list__value" style="padding-left: 10px">
+        {% if rule.enabled %}
+          Yes
+        {% else %}
+          No
+        {% endif %}
+      </dd>
+      <dd class="govuk-summary-list__actions" style="padding-right: 10px">
+        <a class="govuk-link" href="/toggle-rule?actionID={{ item.actionID }}&ruleID={{ rule.id }}&actionDescription={{ item.heading }}">
+          Change<span class="govuk-visually-hidden">rule {{ ruleID }}</span>
+        </a>
+      </dd>
+    </div>
+
+    <div class="govuk-summary-list__row" >
+      <dd class="govuk-summary-list__key"></dd>
+      <dd class="govuk-summary-list__value"></dd>
+      <dd class="govuk-summary-list__actions"></dd>
+    </div>
+  {% endfor %}
+</dl>
