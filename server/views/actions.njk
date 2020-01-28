@@ -25,7 +25,7 @@
                 }) }}
 
                 {% for ruleType, rules in item.rules | groupby("type") %}
-                  <h3>{{ ruleType | title }} rules</h3>
+                  <h3 class="govuk-heading-m">{{ ruleType | title }} rules</h3>
                   {% include "actions-rule-set.njk" %}
                 {% endfor %}
               </div>
