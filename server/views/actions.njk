@@ -17,14 +17,40 @@
                   <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
                     {{ item.heading }}
                   </span>
-                </h2>
-              </div>
+                </h2>              
+              </div>                            
               <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
                 {{ govukErrorMessage({
                   text: model.errorMessage
-                }) }}
+                }) }}                
+                <h3 class="govuk-heading-m">Pre-check</h3>                
+                <dl class="actions-rule-set govuk-summary-list--no-border">            
+                  <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__key" style="padding-left: 10px">
+                      Enabled
+                    </dt>
+                    <dd class="govuk-summary-list__value" style="padding-left: 10px">
+                      {% if item.preCheck %}
+                        Yes
+                      {% else %}
+                        No
+                      {% endif %}
+                    </dd>
+                    <dd class="govuk-summary-list__actions" style="padding-right: 10px">
+                      <a class="govuk-link" href="/toggle-pre-check?actionID={{ item.actionID }}&actionDescription={{ item.heading }}">
+                        Change<span class="govuk-visually-hidden">pre-check</span>
+                      </a>
+                    </dd>
+                  </div>
 
-                {% for ruleType, rules in item.rules | groupby("type") %}
+                  <div class="govuk-summary-list__row" >
+                    <dd class="govuk-summary-list__key"></dd>
+                    <dd class="govuk-summary-list__value"></dd>
+                    <dd class="govuk-summary-list__actions"></dd>
+                  </div>
+                </dl>
+                {% set sorted_rules = item.rules | sort(false, true, "type") %}                
+                {% for ruleType, rules in sorted_rules | groupby("type") %}
                   <h3 class="govuk-heading-m">{{ ruleType | title }} rules</h3>
                   {% include "actions-rule-set.njk" %}
                 {% endfor %}

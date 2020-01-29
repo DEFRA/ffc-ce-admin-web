@@ -6,10 +6,10 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      {% if model.rule.enabled %}
-        <h1 class="govuk-heading-xl">Disable actions rule</h1>
+      {% if model.preCheck %}
+        <h1 class="govuk-heading-xl">Disable pre-check</h1>
       {% else %}
-        <h1 class="govuk-heading-xl">Enable actions rule</h1>
+        <h1 class="govuk-heading-xl">Enable pre-check</h1>
       {% endif %}
       
       <div class="govuk-body">
@@ -17,28 +17,10 @@
         <dl class="govuk-summary-list--no-border">
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-              Rule
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{ model.rule.description }}
-            </dd>          
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Facts
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {% for fact in model.rule.facts %}
-                <div>{{ fact.description }}</div>
-              {% endfor %}
-            </dd>          
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
               Enabled
             </dt>
             <dd class="govuk-summary-list__value">
-              {% if model.rule.enabled %}
+              {% if model.preCheck %}
                 Yes
               {% else %}
                 No
@@ -46,16 +28,15 @@
             </dd>
           </div>  
         </dl>
-        <form method="POST" action="/toggle-rule">
+        <form method="POST" action="/toggle-pre-check">
           <input type="hidden" name="actionID" value={{ model.action.id }}>
-          <input type="hidden" name="ruleID" value={{ model.rule.id }}>
-          <input type="hidden" name="enabled" value={{ not model.rule.enabled }}>
+          <input type="hidden" name="enabled" value={{ not model.preCheck }}>
           {% set buttonName = "Enable" %}
-          {% if model.rule.enabled %}
+          {% if model.preCheck %}
             {% set buttonName = "Disable" %}
           {% endif %}
           {{ govukButton({
-            text: buttonName + " rule",                          
+            text: buttonName + " pre-check",                          
             name: "update",
             value: "true",
             preventDoubleClick: true
