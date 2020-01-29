@@ -1,4 +1,4 @@
-function toggleRuleModel (actionID, actionDescription, preCheck, errorMessage) {
+function togglePreCheckModel (actionID, actionDescription, preCheck, errorMessage) {
   return {
     action: {
       id: actionID,
@@ -9,4 +9,4 @@ function toggleRuleModel (actionID, actionDescription, preCheck, errorMessage) {
   }
 }
 
-module.exports = toggleRuleModel
+module.exports = togglePreCheckModel
