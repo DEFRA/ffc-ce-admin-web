@@ -54,8 +54,4 @@ describe('Actions test', () => {
     await server.stop()
     jest.clearAllMocks()
   })
-
-  afterAll(() => {
-    jest.unmock('../../server/services/actionService')
-  })
 })

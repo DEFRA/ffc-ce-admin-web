@@ -112,8 +112,4 @@ describe('/toggle-pre-check route test', () => {
     await server.stop()
     jest.clearAllMocks()
   })
-
-  afterAll(() => {
-    jest.unmock('../../server/services/toggleRuleService')
-  })
 })

@@ -88,8 +88,4 @@ describe('toggleRuleService', () => {
     const result = await toggleRuleService.toggleRule('badID', ruleID, false)
     expect(result).toBeUndefined()
   })
-
-  afterAll(() => {
-    jest.unmock('@hapi/wreck')
-  })
 })

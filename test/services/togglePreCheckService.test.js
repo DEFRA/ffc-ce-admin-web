@@ -77,8 +77,4 @@ describe('togglePreCheckService', () => {
     const result = await togglePreCheckService.togglePreCheck('badID', false)
     expect(result).toBeUndefined()
   })
-
-  afterAll(() => {
-    jest.unmock('@hapi/wreck')
-  })
 })
