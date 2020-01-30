@@ -22,7 +22,7 @@ const mockGetActionsResult = {
     {
       id: actionID,
       description: 'Test',
-      'pre-check': enabled,
+      precheck: enabled,
       rules: [{
         id: 1,
         description: 'Test rule',

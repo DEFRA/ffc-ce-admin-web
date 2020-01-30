@@ -7,7 +7,7 @@ async function getPreCheck (actionID) {
   const response = await wreck.get(`${config.actionsUrl}/actions`, { json: true })
   const actions = response.payload.actions || []
   const action = actions.find(action => action.id === actionID)
-  return action ? action['pre-check'] : null
+  return action ? action.precheck : null
 }
 
 module.exports = {
