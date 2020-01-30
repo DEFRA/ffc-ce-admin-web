@@ -5,6 +5,7 @@ function actionsModel (actions, errorMessage) {
     return {
       heading: `${action.id}: ${action.description}`,
       actionID: action.id,
+      preCheck: action.precheck,
       rules: action.rules
     }
   })
