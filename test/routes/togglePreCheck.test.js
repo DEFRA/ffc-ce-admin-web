@@ -1,15 +1,24 @@
 require('../../server/services/togglePreCheckService')
 
+const actionID = 'FG1'
+const enabled = false
+
+const mockTogglePreCheckResult = {
+  id: actionID,
+  description: 'Fencing',
+  rate: 4,
+  precheck: enabled,
+  rules: []
+}
+
 const mockTogglePreCheckService = {
-  getPreCheck: jest.fn().mockResolvedValue(true)
+  getPreCheck: jest.fn().mockResolvedValue(true),
+  togglePreCheck: jest.fn().mockResolvedValue(mockTogglePreCheckResult)
 }
 
 function createMocks () {
   jest.mock('../../server/services/togglePreCheckService', () => mockTogglePreCheckService)
 }
-
-const actionID = 'FG1'
-const enabled = false
 
 const goodGetRequestOptions = {
   method: 'GET',
@@ -78,26 +87,23 @@ describe('/toggle-pre-check route test', () => {
     expect(postResponse.headers.location).toBe('/actions')
   })
 
-  // For the following three tests, the togglePreCheck hasn't been implemented yet (another
-  // ticket exists to do this) but we can test the POST calls and validate the data schema
-
   test('POST calls the toggleRuleService and redirects to /actions', async () => {
     const postResponse = await server.inject(goodPostRequestOptions)
-    // expect(mockTogglePreCheckService.togglePreCheck).toHaveBeenCalledWith(actionID, enabled)
+    expect(mockTogglePreCheckService.togglePreCheck).toHaveBeenCalledWith(actionID, enabled)
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })
 
   test('POST redirects to /actions if malformatted options received', async () => {
     const postResponse = await server.inject(badPostRequestOptions)
-    // expect(mockTogglePreCheckService.togglePreCheck).not.toHaveBeenCalled()
+    expect(mockTogglePreCheckService.togglePreCheck).not.toHaveBeenCalled()
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })
 
   test('POST redirects to /actions if cancel update received', async () => {
     const postResponse = await server.inject(goodPostRequestCancelOptions)
-    // expect(mockTogglePreCheckService.togglePreCheck).not.toHaveBeenCalled()
+    expect(mockTogglePreCheckService.togglePreCheck).not.toHaveBeenCalled()
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })

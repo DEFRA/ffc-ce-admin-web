@@ -4,13 +4,18 @@ let togglePreCheckService
 jest.mock('@hapi/wreck')
 
 let getPayload
+let putPayload
 
 function stubWreckCall () {
   wreck.defaults = () => {
     return {
       get: () => {
         return Promise.resolve({ payload: getPayload })
+      },
+      put: () => {
+        return Promise.resolve({ payload: putPayload })
       }
+
     }
   }
 }
@@ -33,6 +38,14 @@ const mockGetActionsResult = {
   ]
 }
 
+const mockToggleActionResult = {
+  id: actionID,
+  description: 'Fencing',
+  rate: 4,
+  precheck: !enabled,
+  rules: []
+}
+
 describe('togglePreCheckService', () => {
   beforeAll(() => {
     stubWreckCall()
@@ -50,6 +63,19 @@ describe('togglePreCheckService', () => {
     getPayload = mockGetActionsResult
     const result = await togglePreCheckService.getPreCheck('bad id')
     expect(result).toBeNull()
+  })
+
+  test('togglePreCheck returns JSON on successful update', async () => {
+    putPayload = mockToggleActionResult
+    const result = await togglePreCheckService.togglePreCheck(actionID, false)
+    expect(result).toBeDefined()
+    expect(result).toEqual(mockToggleActionResult)
+  })
+
+  test('togglePreCheck returns undefined on unsuccessful update', async () => {
+    putPayload = undefined
+    const result = await togglePreCheckService.togglePreCheck('badID', false)
+    expect(result).toBeUndefined()
   })
 
   afterAll(() => {

@@ -10,6 +10,16 @@ async function getPreCheck (actionID) {
   return action ? action.precheck : null
 }
 
+async function togglePreCheck (actionID, enabled) {
+  const data = JSON.stringify({ enabled: enabled })
+  const response = await wreck.put(
+    `${config.actionsUrl}/actions/${actionID}`,
+    { json: true, payload: data }
+  )
+  return response.payload
+}
+
 module.exports = {
-  getPreCheck
+  getPreCheck,
+  togglePreCheck
 }

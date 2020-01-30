@@ -33,7 +33,7 @@ module.exports = [
 
       if (update) {
         console.log(`Request to set pre-check for actionID=${actionID} to ${enabled}`)
-        // No endpoint to toggle rule yet, but will go in here
+        await togglePreCheckService.togglePreCheck(actionID, enabled)
       }
 
       return h.redirect('/actions')
