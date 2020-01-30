@@ -17,7 +17,7 @@ module.exports = [
       validate: {
         query: togglePreCheckGetSchema,
         failAction: async (request, h) => {
-          console.log('/toggle-rule: Failed to validate GET query params', request.query)
+          console.log('/toggle-pre-check: Failed to validate GET query params', request.query)
           // Fail silently for now and redirect to list of action rules
           // as it is unclear for the demo what to display and where.
           return h.redirect('/actions').takeover()
@@ -42,7 +42,7 @@ module.exports = [
       validate: {
         payload: togglePreCheckPostSchema,
         failAction: async (request, h) => {
-          console.log('/toggle-rule: Failed to validate POST data', request.payload)
+          console.log('/toggle-pre-check: Failed to validate POST data', request.payload)
           // Fail silently for now and redirect to list of action rules
           // as it is unclear for the demo what to display and where.
           return h.redirect('/actions').takeover()

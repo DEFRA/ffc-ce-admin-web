@@ -1,40 +1,31 @@
-require('../../server/services/toggleRuleService')
-const mockToggleRuleResult = {
-  id: 1,
-  description: 'Test rule',
-  enabled: true,
-  facts: []
-}
+require('../../server/services/togglePreCheckService')
 
-const mockToggleRuleService = {
-  getRule: jest.fn().mockResolvedValue(mockToggleRuleResult),
-  toggleRule: jest.fn().mockResolvedValue(mockToggleRuleResult)
+const mockTogglePreCheckService = {
+  getPreCheck: jest.fn().mockResolvedValue(true)
 }
 
 function createMocks () {
-  jest.mock('../../server/services/toggleRuleService', () => mockToggleRuleService)
+  jest.mock('../../server/services/togglePreCheckService', () => mockTogglePreCheckService)
 }
 
 const actionID = 'FG1'
-const ruleID = 1
 const enabled = false
 
 const goodGetRequestOptions = {
   method: 'GET',
-  url: `/toggle-rule?actionID=${actionID}&ruleID=${ruleID}&actionDescription=test`
+  url: `/toggle-pre-check?actionID=${actionID}&actionDescription=test`
 }
 
 const badGetRequestOptions = {
   method: 'GET',
-  url: `/toggle-rule?actionID=${actionID}&actionDescription=test`
+  url: `/toggle-rule?actionID=${actionID}`
 }
 
 const goodPostRequestOptions = {
   method: 'POST',
-  url: '/toggle-rule',
+  url: '/toggle-pre-check',
   payload: {
     actionID,
-    ruleID,
     enabled,
     update: true
   }
@@ -42,10 +33,9 @@ const goodPostRequestOptions = {
 
 const goodPostRequestCancelOptions = {
   method: 'POST',
-  url: '/toggle-rule',
+  url: '/toggle-pre-check',
   payload: {
     actionID,
-    ruleID,
     enabled,
     update: false
   }
@@ -53,16 +43,15 @@ const goodPostRequestCancelOptions = {
 
 const badPostRequestOptions = {
   method: 'POST',
-  url: '/toggle-rule',
+  url: '/toggle-pre-check',
   payload: {
-    actionID,
-    ruleID: 'bad id',
+    actionID: 1,
     enabled,
     update: true
   }
 }
 
-describe('/toggle-rule route test', () => {
+describe('/toggle-pre-check route test', () => {
   let createServer
   let server
 
@@ -79,33 +68,36 @@ describe('/toggle-rule route test', () => {
   test('GET calls the toggleRuleService and gets a 200 response', async () => {
     const getResponse = await server.inject(goodGetRequestOptions)
     expect(getResponse.statusCode).toBe(200)
-    expect(mockToggleRuleService.getRule).toHaveBeenCalledWith(actionID, ruleID)
+    expect(mockTogglePreCheckService.getPreCheck).toHaveBeenCalledWith(actionID)
   })
 
   test('GET redirects to /actions if malformatted query params received', async () => {
     const postResponse = await server.inject(badGetRequestOptions)
-    expect(mockToggleRuleService.getRule).not.toHaveBeenCalled()
+    expect(mockTogglePreCheckService.getPreCheck).not.toHaveBeenCalled()
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })
+
+  // For the following three tests, the togglePreCheck hasn't been implemented yet (another
+  // ticket exists to do this) but we can test the POST calls and validate the data schema
 
   test('POST calls the toggleRuleService and redirects to /actions', async () => {
     const postResponse = await server.inject(goodPostRequestOptions)
-    expect(mockToggleRuleService.toggleRule).toHaveBeenCalledWith(actionID, ruleID, enabled)
+    // expect(mockTogglePreCheckService.togglePreCheck).toHaveBeenCalledWith(actionID, enabled)
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })
 
-  test('POST /toggle-rule route just redirects to /actions if malformatted options received', async () => {
+  test('POST redirects to /actions if malformatted options received', async () => {
     const postResponse = await server.inject(badPostRequestOptions)
-    expect(mockToggleRuleService.toggleRule).not.toHaveBeenCalled()
+    // expect(mockTogglePreCheckService.togglePreCheck).not.toHaveBeenCalled()
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })
 
-  test('POST /toggle-rule route just redirects to /actions if cancel update received', async () => {
+  test('POST redirects to /actions if cancel update received', async () => {
     const postResponse = await server.inject(goodPostRequestCancelOptions)
-    expect(mockToggleRuleService.toggleRule).not.toHaveBeenCalled()
+    // expect(mockTogglePreCheckService.togglePreCheck).not.toHaveBeenCalled()
     expect(postResponse.statusCode).toBe(302)
     expect(postResponse.headers.location).toBe('/actions')
   })
