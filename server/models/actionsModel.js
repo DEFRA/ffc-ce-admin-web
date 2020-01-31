@@ -3,7 +3,7 @@ const actionId = 'actionId'
 function actionsModel (actions, errorMessage) {
   const items = actions.map(action => {
     return {
-      heading: `${action.id}: ${action.description}`,
+      heading: action.description,
       actionID: action.id,
       preCheck: action.precheck,
       rules: action.rules
