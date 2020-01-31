@@ -5,7 +5,7 @@ service:
 container:
   allowPrivilegeEscalation: false
   imagePullPolicy: Always
-  actionsUrl: http://ffc-ce-payment-orchestrator.ffc-ce
+  actionsUrl: http://ffc-ce-payment-orchestrator.ffc-ce-payment-orchestrator-pr30
 ingress:
   endPoint: ce-admin
   server: ffc.aws-int.defra.cloud
