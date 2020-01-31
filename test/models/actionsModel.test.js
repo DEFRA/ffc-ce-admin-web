@@ -21,7 +21,7 @@ describe('actionsModel', () => {
     expect(model.items).toBeDefined()
     expect(model.items.length).toEqual(1)
     expect(model.items[0].actionID).toEqual(action.id)
-    expect(model.items[0].heading).toEqual(`${action.id}: ${action.description}`)
+    expect(model.items[0].heading).toEqual(action.description)
     expect(model.items[0].rules).toBeDefined()
     expect(model.items[0].rules.length).toEqual(1)
     expect(model.items[0].rules[0].id).toEqual(action.rules[0].id)

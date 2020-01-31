@@ -7,16 +7,17 @@
     <div class="govuk-grid-column-two-thirds">
       <span class="govuk-caption-xl">Dashboard</span>
       <h1 class="govuk-heading-xl">Agreements calculator administration</h1>
+      <p class="govuk-body">Use this service to:</p>
 
-      <p class="govuk-body">
-        This is an administration console to configure action rules for the agreements calculator.
-      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>configure action rules for the Agreements calculator service</li>
+      </ul>
 
       <form method="GET" action="/actions">
         {{ govukButton({
           classes: "govuk-!-margin-top-2 govuk-!-margin-bottom-8",
           isStartButton: true,
-          text: "Configure action rules"
+          text: "Configure rules"
         }) }}
       </form>
     </div>
