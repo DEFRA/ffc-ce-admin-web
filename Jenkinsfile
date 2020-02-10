@@ -21,11 +21,13 @@ def timeoutInMinutes = 5
 
 def getExtraCommands(pr, containerTag, ingressServer) {
   withCredentials([
-      string(credentialsId: 'albTags', variable: 'albTags'),
-      string(credentialsId: 'albSecurityGroups', variable: 'albSecurityGroups'),
-      string(credentialsId: 'albArn', variable: 'albArn'),
-      string(credentialsId: 'ffc-ce-admin-web-cookie-password', variable: 'cookiePassword'),
-    ]) {
+    string(credentialsId: 'albTags', variable: 'albTags'),
+    string(credentialsId: 'albSecurityGroups', variable: 'albSecurityGroups'),
+    string(credentialsId: 'albArn', variable: 'albArn'),
+    string(credentialsId: 'ffc-ce-admin-web-cookie-password', variable: 'cookiePassword'),
+  ]) {
+
+    def serviceName = pr ? "ffc-ce-admin-web-pr$pr" : 'ffc-ce-admin-web'
 
     def helmValues = [
       /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
@@ -34,7 +36,8 @@ def getExtraCommands(pr, containerTag, ingressServer) {
       /ingress.alb.arn="$albArn"/,
       /ingress.alb.securityGroups="$albSecurityGroups"/,
       /ingress.endPoint="ce-admin-$containerTag"/,
-      /ingress.server="$ingressServer"/
+      /ingress.server="$ingressServer"/,
+      /name="$serviceName"/
     ].join(',')
 
     return [
