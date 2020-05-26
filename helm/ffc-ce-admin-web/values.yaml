@@ -7,6 +7,8 @@ service:
   port: 80
   type: ClusterIP
 
+deployment:
+
 container:
   imagePullPolicy: IfNotPresent
   redeployOnChange: update this field to force a change
@@ -20,12 +22,12 @@ container:
   allowPrivilegeEscalation: false
   restartPolicy: Always
   actionsUrl: http://ffc-ce-payment-orchestrator.ffc-ce
-  cookiePassword:
+  cookiePassword: H3QrRq0AhhsXLI6cSEbvTHUoa2C3qOybLpO1ku48
   restClientTimeoutMillis: 20000
   staticCacheTimeoutMillis: 54000
 ingress:
   endPoint: ffc-ce-admin
-  server: vividcloudsolutions.co.uk
+  server: acme-corp.com
 replicas: 1
 minReadySeconds: 5
 

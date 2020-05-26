@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ quote .Values.name }}
@@ -6,6 +6,9 @@ spec:
   replicas: {{ .Values.replicas }}
   minReadySeconds: {{ .Values.minReadySeconds }}
   strategy: {}
+  selector:
+    matchLabels:
+      app: {{ quote .Values.name }}
   template:
     metadata:
       labels:

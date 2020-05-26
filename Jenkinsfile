@@ -1,107 +1,99 @@
-@Library('defra-library@0.0.8')
-import uk.gov.defra.ffc.DefraUtils
-def defraUtils = new DefraUtils()
+@Library('defra-library@psd-770-azure-ci') _
 
-def registry = '562955126301.dkr.ecr.eu-west-2.amazonaws.com'
-def regCredsId = 'ecr:eu-west-2:ecr-user'
-def kubeCredsId = 'FFCLDNEKSAWSS001_KUBECONFIG'
-def ingressServer = 'ffc.aws-int.defra.cloud'
-def imageName = 'ffc-ce-admin-web'
-def repoName = 'ffc-ce-admin-web'
-def pr = ''
-def mergedPrNo = ''
-
-def containerTag = ''
-def sonarQubeEnv = 'SonarQube'
-def sonarScanner = 'SonarScanner'
-def containerSrcFolder = '\\/usr\\/src\\/app'
+def config = [environment: "dev"]
+def containerSrcFolder = '\\/home\\/node'
 def localSrcFolder = '.'
 def lcovFile = './test-output/lcov.info'
-def timeoutInMinutes = 5
-
-def getExtraCommands(pr, containerTag, ingressServer) {
-  withCredentials([
-      string(credentialsId: 'albTags', variable: 'albTags'),
-      string(credentialsId: 'albSecurityGroups', variable: 'albSecurityGroups'),
-      string(credentialsId: 'albArn', variable: 'albArn'),
-      string(credentialsId: 'ffc-ce-admin-web-cookie-password', variable: 'cookiePassword'),
-    ]) {
-
-    def helmValues = [
-      /container.redeployOnChange="$pr-$BUILD_NUMBER"/,
-      /container.cookiePassword="$cookiePassword"/,
-      /ingress.alb.tags="$albTags"/,
-      /ingress.alb.arn="$albArn"/,
-      /ingress.alb.securityGroups="$albSecurityGroups"/,
-      /ingress.endPoint="ce-admin-$containerTag"/,
-      /ingress.server="$ingressServer"/
-    ].join(',')
-
-    return [
-      "--values ./helm/ffc-ce-admin-web/jenkins-aws.yaml",
-      "--set $helmValues"
-    ].join(' ')
-  }
-}
 
 node {
   checkout scm
+
   try {
+    stage('Set GitHub status as pending') {
+      build.setGithubStatusPending()
+    }
+
     stage('Set PR, and containerTag variables') {
-      (pr, containerTag, mergedPrNo) = defraUtils.getVariables(repoName)
-      defraUtils.setGithubStatusPending()
+      (repoName, pr, containerTag, mergedPrNo) = build.getVariables(version.getPackageJsonVersion())
     }
+
+    if (pr != '') {
+      stage('Verify version incremented') {
+        version.verifyPackageJsonIncremented()
+      }
+    }
+
     stage('Helm lint') {
-      defraUtils.lintHelm(imageName)
+      test.lintHelm(repoName)
     }
+
     stage('Build test image') {
-      defraUtils.buildTestImage(imageName, BUILD_NUMBER)
+      build.buildTestImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, BUILD_NUMBER, containerTag)
     }
+
     stage('Run tests') {
-      defraUtils.runTests(imageName, BUILD_NUMBER)
+      build.runTests(repoName, repoName, BUILD_NUMBER, containerTag)
     }
-    stage('Fix absolute paths in lcov file') {
-      defraUtils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
+
+    stage('Create JUnit report') {
+      test.createJUnitReport()
     }
-    stage('SonarQube analysis') {
-      defraUtils.analyseCode(sonarQubeEnv, sonarScanner, ['sonar.projectKey' : repoName, 'sonar.sources' : '.'])
+
+    stage('Fix lcov report') {
+      utils.replaceInFile(containerSrcFolder, localSrcFolder, lcovFile)
     }
-    stage("Code quality gate") {
-      defraUtils.waitForQualityGateResult(timeoutInMinutes)
-    }
+
+    // Test master branch branch
+    // pr = ''
+    // containerTag = '0.1.0'
+
     stage('Push container image') {
-      defraUtils.buildAndPushContainerImage(regCredsId, registry, imageName, containerTag)
+      build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, containerTag)
     }
+
     if (pr != '') {
       stage('Helm install') {
-          defraUtils.deployChart(kubeCredsId, registry, imageName, containerTag, getExtraCommands(pr, containerTag, ingressServer))
-          echo "Build available for review at https://ce-admin-$containerTag.$ingressServer"
+        helm.deployChart(config.environment, DOCKER_REGISTRY, repoName, containerTag)
+      }
+    }
+    else {
+      stage('Publish chart') {
+        helm.publishChartToACR(DOCKER_REGISTRY, repoName, containerTag)
       }
 
-    }
-    if (pr == '') {
-      stage('Publish chart') {
-        defraUtils.publishChart(registry, imageName, containerTag)
+      stage('Trigger GitHub release') {
+        withCredentials([
+          string(credentialsId: 'github-auth-token', variable: 'gitToken')
+        ]) {
+          release.trigger(containerTag, repoName, containerTag, gitToken)
+        }
       }
+
       stage('Trigger Deployment') {
         withCredentials([
-          string(credentialsId: 'JenkinsDeployUrl', variable: 'jenkinsDeployUrl'),
-          string(credentialsId: 'ffc-ce-admin-web-deploy-token', variable: 'jenkinsToken')
+          string(credentialsId: 'remote_build_token', variable: 'jenkinsToken')
         ]) {
-          defraUtils.triggerDeploy(jenkinsDeployUrl, 'FCEP/job/ffc-ce-admin-web-deploy', jenkinsToken, ['chartVersion':'1.0.0'])
+          deploy.trigger(JENKINS_DEPLOY_SITE_ROOT, repoName, jenkinsToken, ['chartVersion': containerTag, 'environment': config.environment])
         }
       }
     }
-    if (mergedPrNo != '') {
-      stage('Remove merged PR') {
-        defraUtils.undeployChart(kubeCredsId, imageName, mergedPrNo)
-      }
+
+    stage('Set GitHub status as success'){
+      build.setGithubStatusSuccess()
     }
-    defraUtils.setGithubStatusSuccess()
   } catch(e) {
-    defraUtils.setGithubStatusFailure(e.message)
+    stage('Set GitHub status as fail') {
+      build.setGithubStatusFailure(e.message)
+    }
+
+    // stage('Send build failure slack notification') {
+    //   notifySlack.buildFailure(e.message, "#generalbuildfailures")
+    // }
+
     throw e
   } finally {
-    defraUtils.deleteTestOutput(imageName)
+    stage('Clean up test output') {
+      test.deleteOutput('defradigital/node-development', containerSrcFolder)
+    }
   }
 }
