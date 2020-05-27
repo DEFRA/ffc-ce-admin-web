@@ -60,7 +60,7 @@ def config = [helmChartLocation: "acr", environment: "dev"]
       }
 
       pr = ''
-      identityTag = "0.2.7"
+      identityTag = "1.4.9"
 
       stage('Push container image') {
         build.buildAndPushContainerImage(DOCKER_REGISTRY_CREDENTIALS_ID, DOCKER_REGISTRY, repoName, identityTag)
