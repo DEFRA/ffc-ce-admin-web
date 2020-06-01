@@ -1,6 +1,5 @@
 {{- include "ffc-helm-library.deployment" (list . "ffc-ce-admin-web.deployment") -}}
 {{- define "ffc-ce-admin-web.deployment" -}}
-apiVersion: apps/v1
 spec:
   template:
     spec:
