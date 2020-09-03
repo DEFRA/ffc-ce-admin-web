@@ -30,7 +30,7 @@
   ],
   "license": "OGL-UK-3.0",
   "dependencies": {
-    "@hapi/hapi": "^18.4.0",
+    "@hapi/hapi": "^19.1.1",
     "@hapi/hoek": "^8.3.0",
     "@hapi/inert": "^5.2.2",
     "@hapi/joi": "^16.1.7",
